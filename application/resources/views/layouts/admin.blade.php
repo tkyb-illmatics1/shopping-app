@@ -33,7 +33,7 @@
                     管理者
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">メニュー</a>
+                    <a class="dropdown-item" href="#">管理者情報</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();">ログアウト</a>
                     <form id="logout-form" class="d-none" action="{{ route('admin.logout') }}" method="POST">
@@ -51,13 +51,23 @@
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            メニュー1
+                        <a class="nav-link active" href="">
+                            商品管理
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            メニュー2
+                        <a class="nav-link" href="">
+                            商品カテゴリ管理
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">
+                            顧客管理
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.admin_users') }}">
+                            管理者管理
                         </a>
                     </li>
                 </ul>

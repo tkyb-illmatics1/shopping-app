@@ -29,6 +29,10 @@ Route::prefix('admin')->namespace('Admin')->as('admin.')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::post('logout', 'LoginController@logout')->name('logout');
         Route::get('home', 'HomeController@index')->name('home');
+        Route::get('admin_users', 'AdminUserController@showAdminUserList')->name('admin_users');
+        Route::get('admin_users/create', 'AdminUserController@createAdminUser')->name('admin_users_create');
+        Route::post('admin_users', 'AdminUserController@insertAdminUser')->name('admin_users');
+        // Route::get('admin_users/{id}', 'AdminUserController@showAdminUserDetail')->name('admin_users/');
     });
 });
 
