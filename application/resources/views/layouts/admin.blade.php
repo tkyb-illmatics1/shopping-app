@@ -52,12 +52,22 @@
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link active" href="#">
-                            メニュー1
+                            賞品管理
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                            メニュー2
+                            賞品カテゴリ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            顧客管理
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.admin_users.index') }}">
+                            管理者管理
                         </a>
                     </li>
                 </ul>
