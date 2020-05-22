@@ -45,4 +45,43 @@ class AdminUser extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function scopeSerach($query, $request){
+
+        // $query = $this->setFuzzySearch('name', $request->input('name'));
+
+        $name = $request->input('name');
+        if (!empty($name)) {
+            $query->where('name', 'like', '%' . $name . '%');
+        }
+
+        $email = $request->input('email');
+        if (!empty($email)) {
+            $query->where('email', 'like', '%' . $email);
+        }
+
+        $iauthority = $request->input('iauthorityRadioOptions');
+        if (!empty($iauthority) && $iauthority != 999) {
+            $query->where('is_owner', '=', $iauthority);
+        }
+        
+        $sortType = $request->input('sortType');
+        if (empty($sortType)) {
+            $sortType = "id";
+        }
+
+        $sortOrder = $request->input('sortOrder');
+        if (empty($sortOrder)) {
+            $sortOrder = "asc";
+        }
+
+        $query->orderBy($sortType, $sortOrder);
+        
+        $display = $request->input('display');
+        if (!empty($display)) {
+            return $query->paginate($display);
+        } else {
+            return $query->paginate(10);
+        }
+    }
 }
