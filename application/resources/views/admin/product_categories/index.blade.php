@@ -6,7 +6,7 @@
             @csrf
             <div class="border row center-block text-center">
                 <div class="col-12 mt-4">
-                    <input type="name" id="name" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $old['name'] }}" placeholder="名称" autofocus>
+                    <input type="name" id="name" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ request('name') }}" placeholder="名称" autofocus>
                     @error('name')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -15,23 +15,23 @@
                 </div>
                 <div class="col-4 mt-4">
                     <select class="form-control" name="sortType">
-                        <option value="id" @if ($old['sortType'] == "id") selected="selected" @endif>並び替え: ID</option>
-                        <option value="name"  @if ($old['sortType'] == "name") selected="selected" @endif>並び替え: 名称</option>
-                        <option value="order_no"  @if ($old['sortType'] == "order_no") selected="selected" @endif>並び替え: 並び順番号</option>
+                        <option value="id" @if (request('sortType') == "id") selected @endif>並び替え: ID</option>
+                        <option value="name"  @if (request('sortType') == "name") selected @endif>並び替え: 名称</option>
+                        <option value="order_no"  @if (request('sortType') == "order_no") selected @endif>並び替え: 並び順番号</option>
                     </select>
                 </div>
                 <div class="col-4 mt-4">
                     <select class="form-control" name="sortOrder">
-                        <option value="asc" @if ($old['sortOrder'] == "asc") selected="selected" @endif>並び替え方向: 昇順</option>
-                        <option value="desc" @if ($old['sortOrder'] == "desc") selected="selected" @endif>並び替え方向: 降順</option>
+                        <option value="asc" @if (request('sortOrder') == "asc") selected @endif>並び替え方向: 昇順</option>
+                        <option value="desc" @if (request('sortOrder') == "desc") selected @endif>並び替え方向: 降順</option>
                     </select>
                 </div>
                 <div class="col-2 mt-4">
                     <select class="form-control" name="display">
-                        <option value="10" @if ($old['display'] == 10) selected="selected" @endif>表示: 10件</option>
-                        <option value="20" @if ($old['display'] == 20) selected="selected" @endif>表示: 20件</option>
-                        <option value="50" @if ($old['display'] == 50) selected="selected" @endif>表示: 50件</option>
-                        <option value="100" @if ($old['display'] == 100) selected="selected" @endif>表示: 100件</option>
+                        <option value="10" @if (request('display') == 10) selected @endif>表示: 10件</option>
+                        <option value="20" @if (request('display') == 20) selected @endif>表示: 20件</option>
+                        <option value="50" @if (request('display') == 50) selected @endif>表示: 50件</option>
+                        <option value="100" @if (request('display') == 100) selected @endif>表示: 100件</option>
                     </select>
                 </div>
                 <div class="col-2 mt-4 mb-4">
@@ -55,12 +55,12 @@
         @foreach ($lists as $list)
             <tr>
                 <th scope="row">{{ $list->id }}</th>
-                <td><a href="{{ route('admin.product_categories.show', $list->id) }}">{{ $list->name }}</a></td>
+                <td><a href="{{ route('admin.product_categories.show', $list) }}">{{ $list->name }}</a></td>
                 <td>{{ $list->order_no }}</td>
             </tr>
         @endforeach
         </tbody>
     </table>
-    {!! $paginate->appends(['name'=>$old['name'], 'sortType'=>$old['sortType'], 'sortOrder'=>$old['sortOrder'], 'display'=>$old['display']])->render() !!}
+    {{ $lists->appends(request()->query())->links() }}
 
 @endsection

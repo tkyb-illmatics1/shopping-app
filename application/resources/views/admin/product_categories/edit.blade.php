@@ -24,7 +24,7 @@
 
             <div class="row">
                 <div class="col-2 mt-4">
-                    <button class="btn btn-lg btn-dark" type="submit" name="action" value="back">キャンセル</button>
+                    <a class="btn btn-lg btn-dark" href="{{ route('admin.product_categories.show', $old->id) }}">キャンセル</a>
                 </div>
                 <div class="col-2 mt-4">
                     <button class="btn btn-lg btn-primary" type="submit" name="action" value="update">更新</button>

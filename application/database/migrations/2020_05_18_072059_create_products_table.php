@@ -21,6 +21,8 @@ class CreateProductsTable extends Migration
             $table->text('description')->nullable();
             $table->string('image_path')->nullable();
             $table->timestamps();
+
+            $table->foreign('product_category_id')->references('id')->on('product_categories');
         });
     }
 
