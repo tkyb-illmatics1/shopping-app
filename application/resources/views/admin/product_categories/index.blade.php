@@ -52,15 +52,15 @@
             </tr>
         </thead>
         <tbody>
-        @foreach ($lists as $list)
+        @foreach ($productCategories as $productCategory)
             <tr>
-                <th scope="row">{{ $list->id }}</th>
-                <td><a href="{{ route('admin.product_categories.show', $list) }}">{{ $list->name }}</a></td>
-                <td>{{ $list->order_no }}</td>
+                <th scope="row">{{ $productCategory->id }}</th>
+                <td><a href="{{ route('admin.product_categories.show', $productCategory) }}">{{ $productCategory->name }}</a></td>
+                <td>{{ $productCategory->order_no }}</td>
             </tr>
         @endforeach
         </tbody>
     </table>
-    {{ $lists->appends(request()->query())->links() }}
+    {{ $productCategories->appends(request()->query())->links() }}
 
 @endsection

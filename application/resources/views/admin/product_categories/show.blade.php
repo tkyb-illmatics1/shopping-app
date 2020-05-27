@@ -8,10 +8,10 @@
                 <h1 class="h3 font-weight-normal">一覧</h1>
             </div>
             <div class="mt-3 mb-3">
-                <button class="btn btn-success" onclick="location.href='{{ route('admin.product_categories.edit', $data->id) }}'">編集</button>
+                <button class="btn btn-success" onclick="location.href='{{ route('admin.product_categories.edit', $productCategory) }}'">編集</button>
             </div>
-            <div class="mt-3 ml-4 mb-3" @if($disp_flg != 0) hidden @endif>
-                <form class="form-signin" method="POST" action="{{ route('admin.product_categories.destroy', $data->id) }}">
+            <div class="mt-3 ml-4 mb-3">
+                <form class="form-signin" method="POST" action="{{ route('admin.product_categories.destroy', $productCategory) }}">
                     @csrf
                     @method('DELETE')
                     <button class="btn btn-danger" type="submit">削除</button>
@@ -23,7 +23,7 @@
                 <strong>ID</strong>
             </div>
             <div class="col-10 mt-3">
-                {{ $data->id }}
+                {{ $productCategory->id }}
             </div>
         </div>
         <div class="row mt-2 border-top">
@@ -31,7 +31,7 @@
                 <strong>名称</strong>
             </div>
             <div class="col-10 mt-3">
-                {{ $data->name }}
+                {{ $productCategory->name }}
             </div>
         </div>
         <div class="row mt-2 border-top">
@@ -39,7 +39,7 @@
                 <strong>並び順番号</strong>
             </div>
             <div class="col-10 mt-3">
-                {{ $data->order_no }}
+                {{ $productCategory->order_no }}
             </div>
         </div>
     </div>

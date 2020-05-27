@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\SarchTrait;
+use App\Traits\FuzzySearchable;
 
 class ProductCategory extends Model
 {
-    use SarchTrait;
+    use FuzzySearchable;
 
     /**
      * The attributes that are mass assignable.
@@ -19,23 +19,23 @@ class ProductCategory extends Model
         'order_no',
     ];
 
-    public function scopeSerach($query, $request){
+    public function scopeNameSearch($query, $name){
+        return $this->scopeFuzzySearch('name', $name);
+    }
 
-        $query = $this->setFuzzySearch('name', $request->input('name'));
-
-        $sortType = $request->input('sortType');
+    public function scopeSortOrder($query, $sortType, $sortOrder){
         if (empty($sortType)) {
             $sortType = "id";
         }
 
-        $sortOrder = $request->input('sortOrder');
         if (empty($sortOrder)) {
             $sortOrder = "asc";
         }
 
-        $query->orderBy($sortType, $sortOrder);
-        
-        $display = $request->input('display');
+        return $query->orderBy($sortType, $sortOrder);
+    }
+
+    public function scopeSearchPaginate($query, $display){
         if (!empty($display)) {
             return $query->paginate($display);
         } else {

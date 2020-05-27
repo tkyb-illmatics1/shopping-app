@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\ProductCategory;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductCategoryRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,18 +23,10 @@ class ProductCategoryRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->isMethod('GET')) {
-            return [
-                'name' => 'nullable|string',
-            ];
-        } else {
-            return [
-                'name' => 'required|unique:App\Models\ProductCategory',
-                'order_no' => 'required|numeric|unique:App\Models\ProductCategory',
-            ];
-        }
-
-        return [];
+        return [
+            'name' => 'required|unique:App\Models\ProductCategory',
+            'order_no' => 'required|numeric|unique:App\Models\ProductCategory',
+        ];
     }
 
     public function messages(){
