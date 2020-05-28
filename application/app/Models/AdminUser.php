@@ -46,25 +46,35 @@ class AdminUser extends Authenticatable
         'password',
     ];
 
-    public function scopeSerach($query, $request){
-
-        // $query = $this->setFuzzySearch('name', $request->input('name'));
+    public function scopeNameSerach($query, $request){
+        // return $this->fuzzySearch('name', $request->input('name'));
 
         $name = $request->input('name');
         if (!empty($name)) {
-            $query->where('name', 'like', '%' . $name . '%');
+            return $query->where('name', 'like', '%' . $name . '%');
         }
+        return ;
+    }
 
+    public function scopeEmailSerach($query, $request){
+        // TODO: trait に追加する
         $email = $request->input('email');
         if (!empty($email)) {
-            $query->where('email', 'like', '%' . $email);
+            return $query->where('email', 'like', '%' . $email);
         }
+        return ;
+    }
 
-        $iauthority = $request->input('iauthorityRadioOptions');
-        if (!empty($iauthority) && $iauthority != 999) {
-            $query->where('is_owner', '=', $iauthority);
+    public function scopeIsOwnerSerach($query, $request){
+        $iauthority = $request->input('iauthority');
+        if (!empty($iauthority) && $iauthority != 0) {
+            $iauthority -= 1;
+            return $query->where('is_owner', '=', $iauthority);
         }
-        
+        return ;
+    }
+
+    public function scopeSortOrder($query, $request){
         $sortType = $request->input('sortType');
         if (empty($sortType)) {
             $sortType = "id";
@@ -75,8 +85,10 @@ class AdminUser extends Authenticatable
             $sortOrder = "asc";
         }
 
-        $query->orderBy($sortType, $sortOrder);
-        
+        return $query->orderBy($sortType, $sortOrder);
+    }
+
+    public function scopeDisplay($query, $request){
         $display = $request->input('display');
         if (!empty($display)) {
             return $query->paginate($display);

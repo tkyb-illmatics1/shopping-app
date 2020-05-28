@@ -23,15 +23,15 @@
                 </div>
                 <div class="col-5 mt-4">
                     <div class="form-check form-check-inline">
-                        <input type="radio" class="form-check-input" id="authorityRadio1" name="iauthorityRadioOptions" value="999" @if (request('iauthorityRadioOptions') == 999) checked @endif>
+                        <input type="radio" class="form-check-input" id="authorityRadio1" name="iauthority" value="0" @if (request('iauthorityRadioOptions') == 0) checked @endif>
                         <label class="form-check-label" for="authorityRadio1">すべての権限</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input type="radio" class="form-check-input" id="authorityRadio2" name="iauthorityRadioOptions"  value="1" @if (request('iauthorityRadioOptions') == 1) checked @endif>
+                        <input type="radio" class="form-check-input" id="authorityRadio2" name="iauthority"  value="2" @if (request('iauthorityRadioOptions') == 2) checked @endif>
                         <label class="form-check-label" for="authorityRadio2">オーナー</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input type="radio" class="form-check-input" id="authorityRadio3" name="iauthorityRadioOptions"  value="0" @if (request('iauthorityRadioOptions') == 0) checked @endif>
+                        <input type="radio" class="form-check-input" id="authorityRadio3" name="iauthority"  value="1" @if (request('iauthorityRadioOptions') == 1) checked @endif>
                         <label class="form-check-label" for="authorityRadio3">一般</label>
                     </div>
                 </div>
@@ -77,12 +77,12 @@
             </tr>
         </thead>
         <tbody>
-        @foreach ($lists as $list)
+        @foreach ($adminUsers as $adminUser)
             <tr>
-                <th scope="row">{{ $list->id }}</th>
-                <td>{{ $list->name }}</td>
-                <td>{{ $list->email }}</td>
-                @if ($list->is_owner == 0)
+                <th scope="row">{{ $adminUser->id }}</th>
+                <td><a href="{{ route('admin.admin_users.show', $adminUser) }}">{{ $adminUser->name }}</a></td>
+                <td>{{ $adminUser->email }}</td>
+                @if ($adminUser->is_owner == 0)
                 <td>一般</td>
                 @else
                 <td>オーナー</td>
@@ -91,6 +91,6 @@
         @endforeach
         </tbody>
     </table>
-    {{ $lists->appends(request()->query())->links() }}
+    {{ $adminUsers->appends(request()->query())->links() }}
 
 @endsection

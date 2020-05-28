@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="col-12 mt-4">
-        <form class="form-signin" method="POST" action="{{ route('admin.admin_users.store') }}">
+        <form class="form-signin" method="POST" action="{{ route('admin.admin_users.update', $adminUser) }}">
             @csrf
 
             <h1 class="h3 font-weight-normal">名称</h1>
-            <input type="text" id="name" class="mb-3 form-control @error('name') is-invalid @enderror" name="name" value="{{ request('name') }}" placeholder="名称" autofocus>
+            <input type="text" id="name" class="mb-3 form-control @error('name') is-invalid @enderror" name="name" value="{{ $adminUser['name'] }}" placeholder="名称" autofocus>
             @error('name')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -14,7 +14,7 @@
             @enderror
 
             <h1 class="h3 font-weight-normal">並び順番号</h1>
-            <input type="text" id="order_no" class="mb-3 form-control @error('order_no') is-invalid @enderror" name="order_no" value="{{ request('order_no') }}" placeholder="並び順番号" autofocus>
+            <input type="text" id="order_no" class="mb-3 form-control @error('order_no') is-invalid @enderror" name="order_no" value="{{ $adminUser['order_no'] }}" placeholder="並び順番号" autofocus>
             @error('order_no')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -39,11 +39,11 @@
 
             <div class="col-5 mt-4">
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="authorityRadio2" name="iauthorityRadioOptions"  value="1" @if (request('iauthorityRadioOptions') == 1) checked @endif>
+                    <input type="radio" class="form-check-input" id="authorityRadio2" name="iauthorityRadioOptions"  value="1" @if ($adminUser['iauthorityRadioOptions'] == 1) checked @endif>
                     <label class="form-check-label" for="authorityRadio2">オーナー</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" id="authorityRadio3" name="iauthorityRadioOptions"  value="0" @if (request('iauthorityRadioOptions') == 0) checked @endif>
+                    <input type="radio" class="form-check-input" id="authorityRadio3" name="iauthorityRadioOptions"  value="0" @if ($adminUser['iauthorityRadioOptions'] == 0) checked @endif>
                     <label class="form-check-label" for="authorityRadio3">一般</label>
                 </div>
             </div>

@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use app\Models\AdminUser;
+use App\Http\Requests\AdminUser\IndexRequest;
+use App\Http\Requests\AdminUser\StoreRequest;
+use App\Http\Requests\AdminUser\UpdateRequest;
 
 class AdminUserController extends Controller
 {
@@ -13,11 +16,15 @@ class AdminUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(IndexRequest $request)
     {
-        $lists = AdminUser::Serach($request);
+        $adminUsers = AdminUser::nameSerach($request)
+                                ->emailSerach($request)
+                                ->isOwnerSerach($request)
+                                ->sortOrder($request)
+                                ->display($request);
 
-        return view('admin.admin_users.index', ['lists' => $lists]);
+        return view('admin.admin_users.index', ['adminUsers' => $adminUsers]);
     }
 
     /**
@@ -36,9 +43,11 @@ class AdminUserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
+        // AdminUser::create($request->validated());
+
+        return redirect('/admin/admin_users');
     }
 
     /**
@@ -47,9 +56,9 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(AdminUser $adminUser)
     {
-        //
+        return view('admin.admin_users.show', ['adminUser' => $adminUser]);
     }
 
     /**
@@ -58,9 +67,9 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(AdminUser $adminUser)
     {
-        //
+        return view('admin.admin_users.edit', ['adminUser' => $adminUser]);
     }
 
     /**
@@ -70,9 +79,9 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, AdminUser $adminUser)
     {
-        //
+        return view('admin.admin_users.show', ['adminUser' => $adminUser]);
     }
 
     /**
@@ -83,6 +92,6 @@ class AdminUserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
     }
 }
