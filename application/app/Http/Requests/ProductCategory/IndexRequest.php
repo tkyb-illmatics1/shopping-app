@@ -25,10 +25,28 @@ class IndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'nullable|regex:/^[a-zA-Z0-9ａ-ｚA-Zぁ-んァ-ヶー一-龠]+$/',
-            'sortType' => [Rule::in(['id', 'name', 'order_no'])],
-            'sortOrder' => [Rule::in(['asc', 'desc'])],
-            'display' => [Rule::in(['10', '20', '50', '100'])],
+            'name' => 'nullable|string',
+            'sortType' => [
+                Rule::in([
+                    'id', 
+                    'name', 
+                    'order_no'
+                ])
+            ],
+            'sortOrder' => [
+                Rule::in([
+                    'asc', 
+                    'desc'
+                ])
+            ],
+            'display' => [
+                Rule::in([
+                    '10', 
+                    '20', 
+                    '50', 
+                    '100'
+                    ])
+                ],
         ];
     }
 

@@ -24,18 +24,15 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:App\Models\ProductCategory',
-            'order_no' => 'required|numeric|unique:App\Models\ProductCategory',
+            'name' => 'required|string',
+            'order_no' => 'required|numeric',
         ];
     }
 
-    public function messages(){
+    public function attributes() {
         return [
-            'name.required' => '名称は必ず入力してください。',
-            'name.unique' => '指定の名称は既に使用されています。',
-            'order_no.required' => '並び順番号は必ず入力してください。',
-            'order_no.numeric' => '並び順番号は半角数字を入力してください。',
-            'order_no.unique' => '指定の並び順番号は既に使用されています。',
+            'name' => '名称',
+            'order_no' => '並び替え順番号',
         ];
     }
 }

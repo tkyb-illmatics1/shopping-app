@@ -3,12 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\FuzzySearchable;
 
 class ProductCategory extends Model
 {
-    use FuzzySearchable;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -19,27 +16,15 @@ class ProductCategory extends Model
         'order_no',
     ];
 
-    public function scopeNameSearch($query, $name){
-        return $this->scopeFuzzySearch('name', $name);
-    }
-
+    /**
+     * ソート（ID、名称、並び順）
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $sortType
+     * @param string $sortOrder
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeSortOrder($query, $sortType, $sortOrder){
-        if (empty($sortType)) {
-            $sortType = "id";
-        }
-
-        if (empty($sortOrder)) {
-            $sortOrder = "asc";
-        }
-
         return $query->orderBy($sortType, $sortOrder);
-    }
-
-    public function scopeSearchPaginate($query, $display){
-        if (!empty($display)) {
-            return $query->paginate($display);
-        } else {
-            return $query->paginate(10);
-        }
     }
 }
