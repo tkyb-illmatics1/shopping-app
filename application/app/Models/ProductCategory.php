@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\FuzzySearchable;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProductCategory extends Model
 {
+    use FuzzySearchable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -24,7 +28,7 @@ class ProductCategory extends Model
      * @param string $sortOrder
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSortOrder($query, $sortType, $sortOrder){
+    public function scopeSortOrder(Builder $query, string $sortType, string $sortOrder){
         return $query->orderBy($sortType, $sortOrder);
     }
 }

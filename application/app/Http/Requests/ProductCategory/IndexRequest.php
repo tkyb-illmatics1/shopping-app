@@ -45,8 +45,8 @@ class IndexRequest extends FormRequest
                     '20', 
                     '50', 
                     '100'
-                    ])
-                ],
+                ])
+            ],
         ];
     }
 

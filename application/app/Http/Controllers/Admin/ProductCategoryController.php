@@ -9,12 +9,9 @@ use App\Models\Product;
 use App\Http\Requests\ProductCategory\IndexRequest;
 use App\Http\Requests\ProductCategory\StoreRequest;
 use App\Http\Requests\ProductCategory\UpdateRequest;
-use App\Models\Traits\FuzzySearchable;
 
 class ProductCategoryController extends Controller
 {
-    use FuzzySearchable;
-
     /**
      * Display a listing of the resource.
      *
@@ -24,21 +21,18 @@ class ProductCategoryController extends Controller
     {
         $query = ProductCategory::query();
         $name = $request->input('name');
-
         $sortType = $request->input('sortType');
-        empty($sortType) ? $sortType = "id" : $sortType;
-
         $sortOrder = $request->input('sortOrder');
-        empty($sortOrder) ? $sortOrder = "asc" : $sortOrder;
-
         $display = $request->input('display');
+        empty($sortType) ? $sortType = "id" : $sortType;
+        empty($sortOrder) ? $sortOrder = "asc" : $sortOrder;
         empty($display) ? $display = 10 : $display;
 
         if($name){
-            $query = $this->scopeFuzzySearch($query, 'name', $name);
+            $query = $query->fuzzySearch('name', $name);
         }
         $productCategories = $query->sortOrder($sortType, $sortOrder)
-                          ->paginate($display);
+                                   ->paginate($display);
 
         return view('admin.product_categories.index', compact("productCategories"));
     }
@@ -97,8 +91,7 @@ class ProductCategoryController extends Controller
      */
     public function update(UpdateRequest $request, productCategory $productCategory)
     {
-        ProductCategory::query()->where('id', $productCategory->id)
-                                ->update($request->validated());
+        $productCategory->update($request->validated());
 
         return redirect()->route('admin.product_categories.show', $productCategory->id);
     }
@@ -113,7 +106,7 @@ class ProductCategoryController extends Controller
     {
         $this->authorize('delete', $productCategory->id);
 
-        ProductCategory::destroy($productCategory->id);
+        $productCategory->destroy($productCategory->id);
 
         return redirect()->route('admin.product_categories.index');
     }
