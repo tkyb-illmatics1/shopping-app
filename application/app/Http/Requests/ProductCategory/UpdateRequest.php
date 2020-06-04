@@ -29,7 +29,8 @@ class UpdateRequest extends FormRequest
         ];
     }
 
-    public function attributes() {
+    public function attributes() 
+    {
         return [
             'name' => '名称',
             'order_no' => '並び替え順番号',
