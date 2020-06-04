@@ -28,8 +28,7 @@ class ProductCategoryController extends Controller
         empty($sortOrder) ? $sortOrder = 'asc' : $sortOrder;
         empty($display) ? $display = 10 : $display;
 
-        if($name)
-        {
+        if ($name) {
             $query = $query->fuzzySearch('name', $name);
         }
         $productCategories = $query->sortOrder($sortType, $sortOrder)

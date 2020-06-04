@@ -31,14 +31,12 @@ class ProductCategory extends Model
     public function scopeSortOrder(Builder $query, string $sortType, string $sortOrder)
     {
         $array = ['id', 'name', 'order_no'];
-        if(!in_array($sortType, $array))
-        {
+        if (!in_array($sortType, $array)) {
             return $query;
         }
 
         $array = ['asc', 'desc'];
-        if(!in_array($sortOrder, $array))
-        {
+        if (!in_array($sortOrder, $array)) {
             return $query;
         }
         return $query->orderBy($sortType, $sortOrder);
