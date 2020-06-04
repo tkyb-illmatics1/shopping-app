@@ -29,6 +29,15 @@ class ProductCategory extends Model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSortOrder(Builder $query, string $sortType, string $sortOrder){
+        $array = ["id", "name", "order_no"];
+        if(!in_array($sortType, $array)){
+            return;
+        }
+
+        $array = ["asc", "dasc"];
+        if(in_array($sortOrder, $array)){
+            return;
+        }
         return $query->orderBy($sortType, $sortOrder);
     }
 }

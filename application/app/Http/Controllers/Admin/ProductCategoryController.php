@@ -13,9 +13,9 @@ use App\Http\Requests\ProductCategory\UpdateRequest;
 class ProductCategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return array $productCategories
      */
     public function index(IndexRequest $request)
     {
@@ -38,9 +38,8 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * 
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
@@ -48,8 +47,7 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
+     * 
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -61,10 +59,10 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
+     * 
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
+     * @return array $productCategories
      */
     public function show(productCategory $productCategory)
     {
@@ -72,10 +70,10 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
+     * 
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
+     * @return array $productCategories
      */
     public function edit(productCategory $productCategory)
     {
@@ -83,10 +81,8 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
+     * 
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateRequest $request, productCategory $productCategory)
@@ -97,9 +93,8 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
+     * 
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function destroy(productCategory $productCategory)
