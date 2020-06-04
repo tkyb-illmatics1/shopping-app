@@ -24,11 +24,12 @@ class ProductCategoryController extends Controller
         $sortType = $request->input('sortType');
         $sortOrder = $request->input('sortOrder');
         $display = $request->input('display');
-        empty($sortType) ? $sortType = "id" : $sortType;
-        empty($sortOrder) ? $sortOrder = "asc" : $sortOrder;
+        empty($sortType) ? $sortType = 'id' : $sortType;
+        empty($sortOrder) ? $sortOrder = 'asc' : $sortOrder;
         empty($display) ? $display = 10 : $display;
 
-        if($name){
+        if($name)
+        {
             $query = $query->fuzzySearch('name', $name);
         }
         $productCategories = $query->sortOrder($sortType, $sortOrder)

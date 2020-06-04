@@ -50,7 +50,8 @@ class IndexRequest extends FormRequest
         ];
     }
 
-    public function attributes() {
+    public function attributes()
+    {
         return [
             'name' => '名称',
             'sortType' => '並び替え',
