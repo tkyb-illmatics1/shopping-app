@@ -5,7 +5,6 @@
         <form class="form-signin" method="POST" action="{{ route('admin.product_categories.update', $productCategory) }}">
             @csrf
             @method('PATCH')
-            <input type="hidden" name="id" value="{{ $productCategory['id'] }}">
 
             <h1 class="h3 font-weight-normal">名称</h1>
             <input type="text" id="name" class="mb-3 form-control @error('name') is-invalid @enderror" name="name" value="{{ $productCategory['name'] }}" placeholder="名称" autofocus>
