@@ -21,17 +21,17 @@
                     </select>
                 </div>
                 <div class="col-4 mt-4">
-                    <select class="form-control" name="sortOrder">
-                        <option value="asc" @if (request('sortOrder') == "asc") selected @endif>並び替え方向: 昇順</option>
-                        <option value="desc" @if (request('sortOrder') == "desc") selected @endif>並び替え方向: 降順</option>
+                    <select class="form-control" name="sortDirection">
+                        <option value="asc" @if (request('sortDirection') == "asc") selected @endif>並び替え方向: 昇順</option>
+                        <option value="desc" @if (request('sortDirection') == "desc") selected @endif>並び替え方向: 降順</option>
                     </select>
                 </div>
                 <div class="col-2 mt-4">
-                    <select class="form-control" name="display">
-                        <option value="10" @if (request('display') == 10) selected @endif>表示: 10件</option>
-                        <option value="20" @if (request('display') == 20) selected @endif>表示: 20件</option>
-                        <option value="50" @if (request('display') == 50) selected @endif>表示: 50件</option>
-                        <option value="100" @if (request('display') == 100) selected @endif>表示: 100件</option>
+                    <select class="form-control" name="pageUnit">
+                        <option value="10" @if (request('pageUnit') == 10) selected @endif>表示: 10件</option>
+                        <option value="20" @if (request('pageUnit') == 20) selected @endif>表示: 20件</option>
+                        <option value="50" @if (request('pageUnit') == 50) selected @endif>表示: 50件</option>
+                        <option value="100" @if (request('pageUnit') == 100) selected @endif>表示: 100件</option>
                     </select>
                 </div>
                 <div class="col-2 mt-4 mb-4">

@@ -60,4 +60,24 @@ class IndexRequest extends FormRequest
         ];
     }
 
+    public function name()
+    {
+        return $this->input('name');
+    }
+
+    public function sortType()
+    {
+        return $this->input('sortType', 'id');
+    }
+
+    public function sortDirection()
+    {
+        return $this->input('sortDirection', 'asc');
+    }
+
+    public function pageUnit()
+    {
+        return $this->input('pageUnit', 10);
+    }
+
 }

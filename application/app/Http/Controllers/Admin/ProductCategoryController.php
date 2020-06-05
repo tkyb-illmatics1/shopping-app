@@ -19,20 +19,13 @@ class ProductCategoryController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $query = ProductCategory::query();
-        $name = $request->input('name');
-        $sortType = $request->input('sortType');
-        $sortOrder = $request->input('sortOrder');
-        $display = $request->input('display');
-        empty($sortType) ? $sortType = 'id' : $sortType;
-        empty($sortOrder) ? $sortOrder = 'asc' : $sortOrder;
-        empty($display) ? $display = 10 : $display;
+        $productCategories = ProductCategory::query();
 
-        if ($name) {
-            $query = $query->fuzzySearch('name', $name);
+        if (filled($request->name())) {
+            $productCategories->fuzzySearch('name', $request->name());
         }
-        $productCategories = $query->sortOrder($sortType, $sortOrder)
-                                   ->paginate($display);
+        $productCategories = $productCategories->sortOrder($request->sortType(), $request->sortDirection())
+                                               ->paginate($request->pageUnit());
 
         return view('admin.product_categories.index', compact("productCategories"));
     }
@@ -99,7 +92,7 @@ class ProductCategoryController extends Controller
      */
     public function destroy(productCategory $productCategory)
     {
-        $this->authorize('delete', $productCategory->id);
+        $this->authorize('delete', $productCategory);
 
         $productCategory->destroy($productCategory->id);
 

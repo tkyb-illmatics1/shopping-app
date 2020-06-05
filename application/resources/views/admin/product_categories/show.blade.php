@@ -10,13 +10,15 @@
             <div class="mt-3 mb-3">
                 <button class="btn btn-success" onclick="location.href='{{ route('admin.product_categories.edit', $productCategory) }}'">編集</button>
             </div>
-            <div class="mt-3 ml-4 mb-3">
-                <form class="form-signin" method="POST" action="{{ route('admin.product_categories.destroy', $productCategory) }}">
-                    @csrf
-                    @method('DELETE')
-                    <button class="btn btn-danger" type="submit">削除</button>
-                </form>
-            </div>
+            @can('delete', $productCategory)
+                <div class="mt-3 ml-4 mb-3">
+                    <form class="form-signin" method="POST" action="{{ route('admin.product_categories.destroy', $productCategory) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger" type="submit">削除</button>
+                    </form>
+                </div>
+            @endcan
         </div>
         <div class="row mt-2 border-top">
             <div class="col-2 mt-3">

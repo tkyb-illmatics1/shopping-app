@@ -20,6 +20,11 @@ class ProductCategory extends Model
         'order_no',
     ];
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
     /**
      * ソート（ID、名称、並び順）
      * 
