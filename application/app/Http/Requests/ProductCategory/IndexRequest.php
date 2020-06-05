@@ -50,6 +50,10 @@ class IndexRequest extends FormRequest
         ];
     }
 
+    /**
+     *
+     * @return array
+     */
     public function attributes()
     {
         return [
@@ -60,21 +64,37 @@ class IndexRequest extends FormRequest
         ];
     }
 
+    /**
+     *
+     * @return string
+     */
     public function name()
     {
         return $this->input('name');
     }
 
+    /**
+     *
+     * @return string
+     */
     public function sortType()
     {
         return $this->input('sortType', 'id');
     }
 
+    /**
+     *
+     * @return string
+     */
     public function sortDirection()
     {
         return $this->input('sortDirection', 'asc');
     }
 
+    /**
+     *
+     * @return integer
+     */
     public function pageUnit()
     {
         return $this->input('pageUnit', 10);

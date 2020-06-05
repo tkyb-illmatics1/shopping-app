@@ -20,6 +20,12 @@ class ProductCategory extends Model
         'order_no',
     ];
 
+
+    /**
+     * 対象の商品カテゴリーに紐付く商品を返す。
+     * 
+     * @return App\Models\Product
+     */
     public function products()
     {
         return $this->hasMany(Product::class);

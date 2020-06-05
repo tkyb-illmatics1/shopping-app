@@ -13,8 +13,9 @@ class ProductCategoryPolicy
     /**
      * Determine whether the user can delete the product category.
      *
+     * @param  AdminUser  $loginUser
      * @param  ProductCategory  $productCategory
-     * @return mixed
+     * @return boolean
      */
     public function delete(AdminUser $loginUser, ProductCategory $productCategory)
     {
