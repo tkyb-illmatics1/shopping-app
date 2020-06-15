@@ -16,7 +16,9 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @return array $products
+     * @return array $productCategories
      */
     public function index(IndexRequest $request)
     {
@@ -42,7 +44,7 @@ class ProductController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return array $productCategories
      */
     public function create()
     {
@@ -53,7 +55,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreRequest $request)
@@ -70,8 +72,9 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  App\Models\Product $product
      * @return \Illuminate\Http\Response
+     * @return array $productCategories
      */
     public function show(Product $product)
     {
@@ -81,7 +84,7 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function edit(Product $product)
@@ -94,7 +97,7 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateRequest $request, Product $product)
@@ -117,7 +120,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function destroy(Product $product)

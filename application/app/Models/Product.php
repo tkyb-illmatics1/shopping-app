@@ -34,7 +34,7 @@ class Product extends Model
     }
 
     /**
-     * 
+     * 価格（以上以下）検索
      * 
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param integer $price
