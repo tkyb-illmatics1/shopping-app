@@ -25,14 +25,14 @@
                     <input type="name" id="price" class="form-control @error('price') is-invalid @enderror" name="price" value="{{ request('price') }}" placeholder="価格" autofocus>
                     <div class="border form-check form-check-inline rounded-right">
                         <div class="mx-2">
-                            <input class="form-check-input" type="radio" name="operator" id="operator1" value=">=" checked>
-                            <label class="form-check-label" for="operator1">
+                            <input class="form-check-input" type="radio" name="comparisonOperator" id="comparisonOperator1" value=">=" checked>
+                            <label class="form-check-label" for="comparisonOperator1">
                                 以上
                             </label>
                         </div>
                         <div class="mx-2">
-                            <input class="form-check-input" type="radio" name="operator" id="operator2" value="<=" @if (request('operator') == "<=" ) checked @endif>
-                            <label class="form-check-label" for="operator2">
+                            <input class="form-check-input" type="radio" name="comparisonOperator" id="comparisonOperator2" value="<=" @if (request('comparisonOperator') == "<=" ) checked @endif>
+                            <label class="form-check-label" for="comparisonOperator2">
                                 以下
                             </label>
                         </div>

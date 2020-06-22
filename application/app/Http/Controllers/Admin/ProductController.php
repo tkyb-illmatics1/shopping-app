@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -25,18 +24,18 @@ class ProductController extends Controller
         $products = Product::with('productCategory');
 
         if (filled($request->prductCategory())) {
-            $products->where('product_category_id', '=', $request->prductCategory());
+            $products->productCategorySearch($request->prductCategory());
         }
         if (filled($request->name())) {
             $products->fuzzySearch('name', $request->name());
         }
-        if (filled($request->price()) && filled($request->operator())) {
-            $products->priceSearch($request->price(), $request->operator());
+        if (filled($request->price()) && filled($request->comparisonOperator())) {
+            $products->priceSearch($request->price(), $request->comparisonOperator());
         }
         $products = $products->sortOrder($request->sortType(), $request->sortDirection())
                              ->paginate($request->pageUnit());
 
-        $productCategories = ProductCategory::query()->get();
+        $productCategories = ProductCategory::query()->sortOrder('order_no', 'asc')->get();
 
         return view('admin.products.index', compact("products", "productCategories"));
     }
@@ -63,7 +62,8 @@ class ProductController extends Controller
         $product = Product::create($request->validated());
         if(filled($request->file('image_path'))){
             $path = $request->file('image_path')->store('productImages');
-            $product->update(['image_path' => $path]);
+            $product->image_path = $path;
+            $product->save();
         }
 
         return redirect()->route('admin.products.index');
@@ -104,14 +104,16 @@ class ProductController extends Controller
     {
         if(filled($request->file('image_path')) || filled($request->deleteFlg())){
             Storage::delete($product->image_path);
-            $product->update(['image_path' => ""]);
+            $product->image_path = "";
+            $product->save();
         }
 
         $product->update($request->validated());
 
         if(filled($request->file('image_path'))){
             $path = $request->file('image_path')->store('productImages');
-            $product->update(['image_path' => $path]);
+            $product->image_path = $path;
+            $product->save();
         }
 
         return redirect()->route('admin.products.show', $product->id);
@@ -125,7 +127,6 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        Storage::delete($product->image_path);
         $product->destroy($product->id);
 
         return redirect()->route('admin.products.index');

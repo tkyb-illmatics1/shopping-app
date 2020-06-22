@@ -28,7 +28,7 @@ class IndexRequest extends FormRequest
             'prductCategory' => 'nullable|integer',
             'name' => 'nullable|string',
             'price' => 'nullable|integer',
-            'operator' => [
+            'comparisonOperator' => [
                 `nullable|string`,
                 Rule::in([
                     '>=',
@@ -108,9 +108,9 @@ class IndexRequest extends FormRequest
      *
      * @return string
      */
-    public function operator()
+    public function comparisonOperator()
     {
-        return $this->input('operator', '>=');
+        return $this->input('comparisonOperator', '>=');
     }
 
     /**
