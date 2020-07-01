@@ -24,18 +24,18 @@ class ProductController extends Controller
         $products = Product::with('productCategory');
 
         if (filled($request->prductCategory())) {
-            $products->productCategorySearch($request->prductCategory());
+            $products->whereProductCategoryId($request->prductCategory());
         }
         if (filled($request->name())) {
             $products->fuzzySearch('name', $request->name());
         }
-        if (filled($request->price()) && filled($request->comparisonOperator())) {
-            $products->priceSearch($request->price(), $request->comparisonOperator());
+        if (filled($request->price()) && filled($request->priceOperator())) {
+            $products->priceSearch($request->price(), $request->priceOperator());
         }
         $products = $products->sortOrder($request->sortType(), $request->sortDirection())
                              ->paginate($request->pageUnit());
 
-        $productCategories = ProductCategory::query()->sortOrder('order_no', 'asc')->get();
+        $productCategories = ProductCategory::sortOrder('order_no', 'asc')->get();
 
         return view('admin.products.index', compact("products", "productCategories"));
     }
@@ -61,9 +61,7 @@ class ProductController extends Controller
     {
         $product = Product::create($request->validated());
         if(filled($request->file('image_path'))){
-            $path = $request->file('image_path')->store('productImages');
-            $product->image_path = $path;
-            $product->save();
+            $product->image_path = $request->file('image_path');
         }
 
         return redirect()->route('admin.products.index');
@@ -102,19 +100,13 @@ class ProductController extends Controller
      */
     public function update(UpdateRequest $request, Product $product)
     {
-        if(filled($request->file('image_path')) || filled($request->deleteFlg())){
+        if(filled($request->deleteFlg())){
             Storage::delete($product->image_path);
-            $product->image_path = "";
-            $product->save();
         }
-
-        $product->update($request->validated());
-
         if(filled($request->file('image_path'))){
-            $path = $request->file('image_path')->store('productImages');
-            $product->image_path = $path;
-            $product->save();
+            $product->image_path = $request->file('image_path');
         }
+        $product->update($request->validated());
 
         return redirect()->route('admin.products.show', $product->id);
     }

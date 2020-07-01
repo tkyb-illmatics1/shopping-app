@@ -64,4 +64,14 @@ class UpdateRequest extends FormRequest
     {
         return $this->input('deleteFlg');
     }
+
+    /**
+     *
+     * @return integer
+     */
+    public function image_path()
+    {
+        return $this->input('image_path');
+    }
+
 }

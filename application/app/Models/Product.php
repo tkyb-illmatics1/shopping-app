@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\FuzzySearchable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 class Product extends Model
 {
@@ -26,12 +27,19 @@ class Product extends Model
 
     /**
      *
-     * @param  string  $value
+     * @param  UploadedFile  $value
      * @return string
      */
-    public function setImagePathAttribute($value)
+    public function setImagePathAttribute(UploadedFile $value)
     {
-        $this->attributes['image_path'] = $value;
+        if (isset($this->image_path) && Storage::exists($this->image_path)) {
+            Storage::delete($this->image_path);
+        }
+        if (is_null($value)) {
+            $this->attributes['image_path'] = "";
+            return;
+        }
+        $this->attributes['image_path'] = $value->store('productImages');
     }
 
     /**
@@ -51,22 +59,11 @@ class Product extends Model
     {
         parent::boot();
 
-        self::deleted(function($product){
+        self::deleting(function($product){
             Storage::delete($product->image_path);
         });
 
         return;
-    }
-
-    /**
-     * 価格（以上以下）検索
-     * 
-     * @param integer $prductCategoryID
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeProductCategorySearch(Builder $query, int $prductCategoryID)
-    {
-        return $query->where('product_category_id', '=', $prductCategoryID);
     }
 
     /**
@@ -77,13 +74,13 @@ class Product extends Model
      * @param string $operator
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopePriceSearch(Builder $query, int $price, string $comparisonOperator)
+    public function scopePriceSearch(Builder $query, int $price, string $priceOperator)
     {
         $target = ['>=', '<='];
-        if (!in_array($comparisonOperator, $target)) {
+        if (!in_array($priceOperator, $target)) {
             return $query;
         }
-        return $query->where('price', $comparisonOperator, $price);
+        return $query->where('price', $priceOperator, $price);
     }
 
     /**
@@ -96,15 +93,16 @@ class Product extends Model
      */
     public function scopeSortOrder(Builder $query, string $sortType, string $sortOrder)
     {
-        $array = ['asc', 'desc'];
-        if (!in_array($sortOrder, $array)) {
+        $sort_definition = ['asc', 'desc'];
+        if (!in_array($sortOrder, $sort_definition)) {
             return $query;
         }
 
-        $array = ['id', 'product_category_id', 'name', 'price'];
-        if (!in_array($sortType, $array)) {
+        $type_definition = ['id', 'product_category_id', 'name', 'price'];
+        if (!in_array($sortType, $type_definition)) {
             return $query;
-        }elseif ($sortType == 'product_category_id') {
+        }
+        elseif ($sortType == 'product_category_id') {
             return $query->join('product_categories', 'product_categories.id', '=', 'products.product_category_id')
                             ->orderBy('product_categories.order_no', $sortOrder)->orderBy('products.id', 'asc');
         }
