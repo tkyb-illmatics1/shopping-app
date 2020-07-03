@@ -51,7 +51,7 @@
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
+                        <a class="nav-link active" href="{{ route('admin.products.index') }}">
                             商品管理
                         </a>
                     </li>
