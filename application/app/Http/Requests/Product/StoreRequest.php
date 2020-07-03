@@ -46,4 +46,13 @@ class StoreRequest extends FormRequest
             'image_path' => 'イメージ',
         ];
     }
+
+    /**
+     *
+     * @return integer
+     */
+    public function image_path()
+    {
+        return $this->input('image_path', null);
+    }
 }

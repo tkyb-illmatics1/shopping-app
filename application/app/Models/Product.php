@@ -30,7 +30,7 @@ class Product extends Model
      * @param  UploadedFile  $value
      * @return string
      */
-    public function setImagePathAttribute(UploadedFile $value)
+    public function setImagePathAttribute(?UploadedFile $value)
     {
         if (isset($this->image_path) && Storage::exists($this->image_path)) {
             Storage::delete($this->image_path);

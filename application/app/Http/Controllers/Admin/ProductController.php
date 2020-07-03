@@ -59,10 +59,7 @@ class ProductController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $product = Product::create($request->validated());
-        if(filled($request->file('image_path'))){
-            $product->image_path = $request->file('image_path');
-        }
+        Product::create($request->validated());
 
         return redirect()->route('admin.products.index');
     }
@@ -100,13 +97,11 @@ class ProductController extends Controller
      */
     public function update(UpdateRequest $request, Product $product)
     {
-        if(filled($request->deleteFlg())){
-            Storage::delete($product->image_path);
+        $paramerter = $request->validated();
+        if ($request->filled("deleteFlg")) {
+            $paramerter = array_merge($paramerter, ['image_path' => null]);
         }
-        if(filled($request->file('image_path'))){
-            $product->image_path = $request->file('image_path');
-        }
-        $product->update($request->validated());
+        $product->update($paramerter);
 
         return redirect()->route('admin.products.show', $product->id);
     }
