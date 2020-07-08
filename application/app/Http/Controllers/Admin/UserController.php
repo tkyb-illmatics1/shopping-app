@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\ProductReview;
+use App\Models\WishProduct;
+use App\Http\Requests\User\IndexRequest;
+use App\Http\Requests\User\StoreRequest;
+use App\Http\Requests\User\UpdateRequest;
 
 class UserController extends Controller
 {
@@ -13,9 +18,18 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(IndexRequest $request)
     {
-        $users = User::query()->get();
+        $users = User::query();
+
+        if (filled($request->name())) {
+            $users->fuzzySearch('name', $request->name());
+        }
+        if (filled($request->email())) {
+            $users->forwardMatchSearch('email', $request->email());
+        }
+        $users = $users->sortOrder($request->sortType(), $request->sortDirection())
+                                               ->paginate($request->pageUnit());
 
         return view('admin.users.index', compact("users"));
     }
@@ -27,7 +41,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.users.create');
     }
 
     /**
@@ -36,53 +50,61 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
+        User::create($request->validated());
+        return redirect()->route('admin.users.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        return view('admin.users.show', compact("user"));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('admin.users.edit', compact("user"));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, User $user)
     {
-        //
+        $paramerter = $request->validated();
+        if ($request->filled("deleteFlg")) {
+            $paramerter = array_merge($paramerter, ['image_path' => null]);
+        }
+        $user->update($paramerter);
+
+        return redirect()->route('admin.users.show', $user->id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->destroy($user->id);
+        return redirect()->route('admin.users.index');
     }
 }

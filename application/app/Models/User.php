@@ -4,6 +4,13 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Traits\FuzzySearchable;
+use App\Models\Traits\ForwardMatchSearchable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+use App\Models\WishProduct;
+use App\Models\ProductReview;
 
 /**
  * App\Models\User
@@ -34,6 +41,8 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use Notifiable;
+    use FuzzySearchable;
+    use ForwardMatchSearchable;
 
     /**
      * The attributes that are mass assignable.
@@ -44,6 +53,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'image_path',
     ];
 
     /**
@@ -64,4 +74,79 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * 対象の顧客に紐付くほしい物リストを返す。
+     * 
+     * @return App\Models\WishProduct
+     */
+    public function wishProducts()
+    {
+        return $this->hasMany(WishProduct::class);
+    }
+
+    /**
+     * 対象の顧客に紐付く商品レビューを返す。
+     * 
+     * @return App\Models\ProductReview
+     */
+    public function productReviews()
+    {
+        return $this->hasMany(ProductReview::class);
+    }
+
+    /**
+     *
+     * @param  UploadedFile  $value
+     * @return string
+     */
+    public function setImagePathAttribute(?UploadedFile $value)
+    {
+        if (isset($this->image_path) && Storage::exists($this->image_path)) {
+            Storage::delete($this->image_path);
+        }
+        if (is_null($value)) {
+            $this->attributes['image_path'] = "";
+            return;
+        }
+        $this->attributes['image_path'] = $value->store('userImages');
+    }
+
+    /**
+     * 
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::deleting(function($user){
+            Storage::delete($user->image_path);
+            $user->wishProducts()->delete();
+            $user->productReviews()->delete();
+        });
+
+        return;
+    }
+
+    /**
+     * ソート（ID、名称、メールアドレス）
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $sortType
+     * @param string $sortOrder
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSortOrder(Builder $query, string $sortType, string $sortOrder)
+    {
+        $array = ['id', 'name', 'email'];
+        if (!in_array($sortType, $array)) {
+            return $query;
+        }
+
+        $array = ['asc', 'desc'];
+        if (!in_array($sortOrder, $array)) {
+            return $query;
+        }
+        return $query->orderBy($sortType, $sortOrder);
+    }
 }

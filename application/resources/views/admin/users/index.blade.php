@@ -14,8 +14,8 @@
                     @enderror
                 </div>
                 <div class="col-6 mt-4">
-                    <input type="name" id="name" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ request('name') }}" placeholder="名称" autofocus>
-                    @error('name')
+                    <input type="text" id="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ request('email') }}" placeholder="メールアドレス" autofocus>
+                    @error('email')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -25,7 +25,7 @@
                     <select class="form-control" name="sortType">
                         <option value="id" @if (request('sortType') == "id") selected @endif>並び替え: ID</option>
                         <option value="name"  @if (request('sortType') == "name") selected @endif>並び替え: 名称</option>
-                        <option value="order_no"  @if (request('sortType') == "order_no") selected @endif>並び替え: 並び順番号</option>
+                        <option value="email"  @if (request('sortType') == "email") selected @endif>並び替え: メールアドレス</option>
                     </select>
                 </div>
                 <div class="col-4 mt-4">
@@ -69,5 +69,6 @@
         @endforeach
         </tbody>
     </table>
+    {{ $users->appends(request()->query())->links() }}
 
 @endsection
