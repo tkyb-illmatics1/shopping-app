@@ -31,6 +31,7 @@ Route::prefix('admin')->namespace('Admin')->as('admin.')->group(function () {
         Route::get('home', 'HomeController@index')->name('home');
         Route::resource('product_categories', 'ProductCategoryController');
         Route::resource('products', 'ProductController');
+        Route::resource('users', 'UserController');
     });
 });
 
