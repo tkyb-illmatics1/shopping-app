@@ -26,20 +26,22 @@ class IndexRequest extends FormRequest
     {
         return [
             'name' => 'nullable|string',
+            'email' => 'nullable|email',
+            'iauthority' => 'nullable|integer',
             'sortType' => [
                 Rule::in([
                     'id', 
                     'name', 
-                    'order_no'
+                    'email'
                 ])
             ],
-            'sortOrder' => [
+            'sortDirection' => [
                 Rule::in([
                     'asc', 
                     'desc'
                 ])
             ],
-            'display' => [
+            'pageUnit' => [
                 Rule::in([
                     '10', 
                     '20', 
@@ -58,6 +60,8 @@ class IndexRequest extends FormRequest
     {
         return [
             'name' => '名称',
+            'email' => 'メールアドレス',
+            'iauthority' => '権限',
             'sortType' => '並び替え',
             'sortOrder' => '並び替え方向',
             'display' => '件数',
@@ -71,6 +75,24 @@ class IndexRequest extends FormRequest
     public function name()
     {
         return $this->input('name');
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function email()
+    {
+        return $this->input('email');
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function iauthority()
+    {
+        return $this->input('iauthority', 0);
     }
 
     /**

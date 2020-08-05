@@ -5,7 +5,7 @@
         <form class="form-signin" method="GET" action="{{ route('admin.admin_users.index') }}">
             @csrf
             <div class="border row center-block text-center">
-                <div class="col-12 mt-4">
+                <div class="col-6 mt-4">
                     <input type="name" id="name" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ request('name') }}" placeholder="名称" autofocus>
                     @error('name')
                     <span class="invalid-feedback" role="alert">
@@ -13,11 +13,35 @@
                     </span>
                     @enderror
                 </div>
+                <div class="col-6 mt-4">
+                    <input type="email" id="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ request('email') }}" placeholder="メールアドレス" autofocus>
+                    @error('email')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+                <div class="col-5 mt-4">
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" id="authorityRadio1" name="iauthority" value="0" @if (request('iauthority') == 0) checked @endif>
+                        <label class="form-check-label" for="authorityRadio1">すべての権限</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" id="authorityRadio2" name="iauthority"  value="2" @if (request('iauthority') == 2) checked @endif>
+                        <label class="form-check-label" for="authorityRadio2">オーナー</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" id="authorityRadio3" name="iauthority"  value="1" @if (request('iauthority') == 1) checked @endif>
+                        <label class="form-check-label" for="authorityRadio3">一般</label>
+                    </div>
+                </div>
+                <div class="col-7 mt-4">
+                </div>
                 <div class="col-4 mt-4">
                     <select class="form-control" name="sortType">
                         <option value="id" @if (request('sortType') == "id") selected @endif>並び替え: ID</option>
                         <option value="name"  @if (request('sortType') == "name") selected @endif>並び替え: 名称</option>
-                        <option value="order_no"  @if (request('sortType') == "order_no") selected @endif>並び替え: 並び順番号</option>
+                        <option value="order_no"  @if (request('sortType') == "email") selected @endif>並び替え: 並び順番号</option>
                     </select>
                 </div>
                 <div class="col-4 mt-4">
@@ -63,5 +87,6 @@
         @endforeach
         </tbody>
     </table>
+    {{ $adminUsers->appends(request()->query())->links() }}
 
 @endsection

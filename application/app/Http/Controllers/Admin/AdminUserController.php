@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AdminUser;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\AdminUser\IndexRequest;
+use App\Http\Requests\AdminUser\StoreRequest;
+use App\Http\Requests\AdminUser\UpdateRequest;
 
 class AdminUserController extends Controller
 {
@@ -13,10 +16,25 @@ class AdminUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexRequest $request)
     {
-        // $adminUsers = AdminUser::query();
-        $adminUsers = AdminUser::query()->get();
+        $this->authorize('index', AdminUser::class);
+
+        $adminUsers = AdminUser::query();
+
+        if (filled($request->name())) {
+            $adminUsers->fuzzySearch('name', $request->name());
+        }
+        if (filled($request->email())) {
+            // TODO::顧客管理マージ後入れ替え予定
+            // $users->forwardMatchSearch('email', $request->email());
+            $adminUsers->forwardMatchSearch('email', $request->email());
+        }
+        if (filled($request->iauthority()) && $request->iauthority() != 0) {
+            $adminUsers->whereIsOwner($request->iauthority()-1);
+        }
+        $adminUsers = $adminUsers->sortOrder($request->sortType(), $request->sortDirection())
+                                    ->paginate($request->pageUnit());
 
         return view('admin.admin_users.index', compact("adminUsers"));
     }
@@ -28,7 +46,9 @@ class AdminUserController extends Controller
      */
     public function create()
     {
-        //
+        $this->authorize('create', AdminUser::class);
+
+        return view('admin.admin_users.create');
     }
 
     /**
@@ -37,53 +57,74 @@ class AdminUserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
+        $this->authorize('store', AdminUser::class);
+
+        $paramerter = array_merge($request->validated(), ['password' => Hash::make($request->validated()['password'])]);
+        AdminUser::create($paramerter);
+
+        return redirect()->route('admin.admin_users.index');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
+     * 
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
+     * @return array $productCategories
      */
-    public function show($id)
+    public function show(AdminUser $adminUser)
     {
-        //
+        $this->authorize('show', $adminUser);
+
+        return view('admin.admin_users.show', compact("adminUser"));
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
+     * 
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
+     * @return array $productCategories
      */
-    public function edit($id)
+    public function edit(AdminUser $adminUser)
     {
-        //
+        $this->authorize('update', $adminUser);
+
+        return view('admin.admin_users.edit', compact("adminUser"));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, AdminUser $adminUser)
     {
-        //
+        $this->authorize('update', $adminUser);
+
+        $paramerter = $request->validated();
+        if($request->filled("password")){
+            $paramerter = array_merge($paramerter, ['password' => Hash::make($request->validated()['password'])]);
+        }else{
+            unset($paramerter['password']);
+        }
+        $adminUser->update($paramerter);
+
+        return redirect()->route('admin.admin_users.show', $adminUser->id);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
+     * 
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(AdminUser $adminUser)
     {
-        //
+        $this->authorize('delete' ,$adminUser);
+
+        $adminUser->destroy($adminUser->id);
+
+        return redirect()->route('admin.admin_users.index');
     }
 }

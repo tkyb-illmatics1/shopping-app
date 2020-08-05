@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Traits\FuzzySearchable;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Models\AdminUser
@@ -26,6 +28,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class AdminUser extends Authenticatable
 {
+    use FuzzySearchable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -35,6 +39,7 @@ class AdminUser extends Authenticatable
         'name',
         'email',
         'password',
+        'is_owner',
     ];
 
     /**
@@ -45,4 +50,42 @@ class AdminUser extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    /**
+     * ソート（ID、名称、メールアドレス）
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $sortType
+     * @param string $sortOrder
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSortOrder(Builder $query, string $sortType, string $sortOrder)
+    {
+        $array = ['id', 'name', 'email'];
+        if (!in_array($sortType, $array)) {
+            return $query;
+        }
+
+        $array = ['asc', 'desc'];
+        if (!in_array($sortOrder, $array)) {
+            return $query;
+        }
+        return $query->orderBy($sortType, $sortOrder);
+    }
+
+
+    // 下記は他のブランチがマスターにマージされるまで仮実装
+
+    /**
+     * 前方一致検索
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $column_name
+     * @param string $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeForwardMatchSearch(Builder $query, string $column_name, string $value)
+    {
+        return $query->where($column_name, 'like', $value . '%');
+    }
 }
