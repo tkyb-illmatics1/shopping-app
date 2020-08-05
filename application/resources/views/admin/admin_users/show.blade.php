@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-2 mt-4">
             @can('index', $adminUser)
-                <h1 class="h3 font-weight-normal">一覧</h1>
+                <h1 class="h3 font-weight-normal"><a href="{{ route('admin.admin_users.index') }}">一覧</a></h1>
             @endcan
             </div>
             <div class="mt-3 mb-3">
