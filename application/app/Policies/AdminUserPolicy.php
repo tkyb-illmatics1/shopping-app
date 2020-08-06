@@ -47,7 +47,7 @@ class AdminUserPolicy
      */
     public function show(AdminUser $loginUser, AdminUser $adminUser)
     {
-        return $loginUser->is_owner == 1 && $loginUser->id == $adminUser->id;
+        return $loginUser->is_owner == 1 || $loginUser->id == $adminUser->id;
     }
 
     /**
@@ -58,7 +58,11 @@ class AdminUserPolicy
      */
     public function edit(AdminUser $loginUser, AdminUser $adminUser)
     {
-        return $loginUser->is_owner == 1 && $loginUser->id !== $adminUser->id;
+        if($loginUser->is_owner == 1){
+            return $loginUser->id !== $adminUser->id;
+        }else{
+            return $loginUser->id == $adminUser->id;
+        }
     }
 
     /**
